@@ -39,6 +39,19 @@
                 border: 1px solid #dc3545;
             }
 
+            .info div {
+                margin-top: 5vh;
+            }
+
+            .info div a {
+                text-decoration: none;
+                padding: 8px 16px;
+                background-color: #f4f4f4;
+                color: #555555;
+                border-radius: 4px;
+                border: 1px solid #f4f4f4;
+            }
+
             h3 {
                 color: #007bff;
             }
@@ -84,31 +97,42 @@
                 // Detect the user's userAgent
                 const userAgent = window.navigator.userAgent;
 
-                // Set the dataForm action attribute
-                document.dataForm.action = 'https://us-central1-awesome-96.cloudfunctions.net/processFormData?userAgent=' + userAgent + '&redirectTo=' + window.location.href;
+                // If you're using https://github.com/kerick-jeff/serverless, replace this with the endpoint you get after deploying your function to Firebase
+                const firebaseCloudFunctionAPI = 'https://us-central1-awesome-96.cloudfunctions.net/processFormData';
                 
+                // Set the dataForm action attribute
+                document.dataForm.action = firebaseCloudFunctionAPI + '?userAgent=' + userAgent + '&redirectTo=' + window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
+
                 document.getElementById("submit-btn").onclick = validate;
             });
 
+            // Handle client-side recaptcha response
             function onSubmit(token) {
-                // Perform server-side verification
                 console.log(token)
 
-                // Handle server-side recaptcha verification. Then, submit form
+                // Now, submit the form. Server-side verification will be performed by the server application
                 document.dataForm.submit();
             }
 
+            // Perform form validation before submitting it
             function validate(event) {
-                if (document.dataForm.checkValidity()) {
-                    grecaptcha.execute();
-                    event.preventDefault();
+                if (document.dataForm.checkValidity()) { // Check if form can be submitted
+                    event.preventDefault(); // Prevent form from being submitted
+                    grecaptcha.execute(); // Execute recaptcha after form validation
                 }
             }
         </script>
     </head>
     <body>
         <?php if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_GET['msg'])) { ?>
-            <div class="info info-success"><?php echo $_GET['msg'] ?></div>
+            <div class="info info-success">
+                <?php echo $_GET['msg'] ?>
+                <?php if ($_GET['publicUrl']) { ?>
+                    <div>
+                        <a href="<?php echo $_GET['publicUrl'] ?>">View File</a>
+                    </div>
+                <?php } ?>
+            </div>
         <?php } elseif(isset($_GET['success']) &&  $_GET['success'] == 'false' && isset($_GET['msg'])) { ?>
             <div class="info info-error"><?php echo $_GET['msg'] ?></div>
         <?php } ?>
