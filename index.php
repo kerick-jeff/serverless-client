@@ -129,7 +129,7 @@
                 <?php echo $_GET['msg'] ?>
                 <?php if ($_GET['publicUrl']) { ?>
                     <div>
-                        <a href="<?php echo $_GET['publicUrl'] ?>">View File</a>
+                        <a href="<?php echo $_GET['publicUrl'] ?>" _target="blank">View File</a>
                     </div>
                 <?php } ?>
             </div>
