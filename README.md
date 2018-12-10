@@ -9,3 +9,6 @@ A simple client application that would use cloud functions hosted on Firebase. D
 * On localhost, run: `php -S localhost:<PORT>`. Replace PORT with a desired port number
 * Or host this application on a production server environment
 
+# Demo
+https://serverless-architecture.herokuapp.com/
+
